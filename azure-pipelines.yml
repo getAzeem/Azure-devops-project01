@@ -2,42 +2,17 @@ trigger:
 - main
 
 pool:
-  name: Default  # ✅ Your self-hosted agent pool
-
-variables:
-  pythonVersion: '3.11.13'
-  pythonInstallDir: 'C:\hosted-python'  # Folder where we’ll install Python
+  name: Default  # Or the actual name of your self-hosted agent pool
 
 steps:
+- checkout: self
 
-# ✅ Step 1: Download and Install Python manually
-- task: PowerShell@2
-  displayName: Install Python ${{ variables.pythonVersion }}
-  inputs:
-    targetType: inline
-    script: |
-      $ErrorActionPreference = 'Stop'
-
-      $pythonInstaller = "python-${{ variables.pythonVersion }}-amd64.exe"
-      $downloadUrl = "https://www.python.org/ftp/python/${{ variables.pythonVersion }}/$pythonInstaller"
-      Invoke-WebRequest $downloadUrl -OutFile $pythonInstaller
-
-      Start-Process -Wait -FilePath ".\$pythonInstaller" -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1 TargetDir=${{ variables.pythonInstallDir }}"
-
-      # Update PATH for current session
-      $env:PATH = "${{ variables.pythonInstallDir }};$env:PATH"
-      python --version
-      pip --version
-
-# ✅ Step 2: Install dependencies
 - script: |
-    $env:PATH="${{ variables.pythonInstallDir }};$env:PATH"
-    python -m pip install --upgrade pip
+    python --version
+    pip --version
     pip install -r requirements.txt
-  displayName: Install Python dependencies
+  displayName: 'Install Python Dependencies'
 
-# ✅ Step 3: Run Unit Tests
 - script: |
-    $env:PATH="${{ variables.pythonInstallDir }};$env:PATH"
     python -m unittest discover -s tests
-  displayName: Run Flask Unit Tests
+  displayName: 'Run Flask Unit Tests'

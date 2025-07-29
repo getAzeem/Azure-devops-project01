@@ -2,17 +2,34 @@ trigger:
 - main
 
 pool:
-  name: Default  # Or the actual name of your self-hosted agent pool
+  name: Default  # Your self-hosted agent pool
 
-steps:
-- checkout: self
+stages:
+- stage: BuildAndTest
+  displayName: "Build & Test Stage"
+  jobs:
+  - job: Build
+    steps:
+    - checkout: self
 
-- script: |
-    python --version
-    pip --version
-    pip install -r requirements.txt
-  displayName: 'Install Python Dependencies'
+    - script: |
+        python --version
+        pip --version
+        pip install -r requirements.txt
+      displayName: 'Install Python Dependencies'
 
-- script: |
-    python -m unittest discover -s tests
-  displayName: 'Run Flask Unit Tests'
+    - script: |
+        python -m unittest discover -s tests
+      displayName: 'Run Flask Unit Tests'
+
+- stage: Deploy
+  displayName: "Deploy Stage"
+  dependsOn: BuildAndTest
+  condition: succeeded()
+  jobs:
+  - job: RunFlaskApp
+    steps:
+    - script: |
+        echo "Starting Flask app..."
+        python app.py
+      displayName: 'Start Flask App'

@@ -4,7 +4,8 @@ trigger:
   - main
 
 pool:
-  vmImage: 'Default'
+  name: Default
+
 
 steps:
   - task: UsePythonVersion@0

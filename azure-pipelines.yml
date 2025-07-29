@@ -4,17 +4,18 @@ trigger:
   - main
 
 pool:
-  name: Default
-
+  name: Default  # <-- your self-hosted agent pool name
 
 steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
+- task: UsePythonVersion@0
+  inputs:
+    version: '3.10'
 
-  - script: |
-      python -m venv venv
-      source venv/bin/activate
-      pip install -r requirements.txt
-      python -m unittest discover tests
-    displayName: 'Run Flask Unit Tests'
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install Python dependencies'
+
+- script: |
+    python -m unittest discover -s tests
+  displayName: 'Run Flask Unit Tests'

@@ -31,5 +31,5 @@ stages:
     steps:
     - script: |
         echo "Starting Flask app..."
-        python app.py
+        start /B python app.py
       displayName: 'Start Flask App'

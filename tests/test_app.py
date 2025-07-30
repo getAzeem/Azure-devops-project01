@@ -1,5 +1,6 @@
 import unittest
-from app import app
+from demo_app.app import app
+
 
 class FlaskAppTests(unittest.TestCase):
     def setUp(self):

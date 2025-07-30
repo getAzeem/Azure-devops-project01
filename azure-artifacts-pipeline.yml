@@ -13,10 +13,10 @@ steps:
     python setup.py sdist bdist_wheel
   displayName: 'Build Python Package'
 
+- task:  TwineAuthenticate@1
+  inputs:
+    artifactFeed:'DevOps-Demo-WebApp/python-demo-feed'
+  displayName: "Authenticate"
 - script: |
-    twine upload --verbose --repository-url https://pkgs.dev.azure.com/E23CSEU1316/DevOps-Demo-WebApp/_packaging/python-demo-feed/pypi/upload/ dist/*
-
-  env:
-    TWINE_USERNAME: E23CSEU1316@bennett.edu.in
-    TWINE_PASSWORD: $(TWINE_PAT)
+    twine upload -r python-demo-feed --config-file $(PYPIRC_PATH) dist/*
   displayName: 'Upload to Azure Artifacts'

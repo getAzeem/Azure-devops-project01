@@ -15,7 +15,7 @@ steps:
 
 - task:  TwineAuthenticate@1
   inputs:
-    artifactFeed:'DevOps-Demo-WebApp/python-demo-feed'
+    artifactFeed: 'DevOps-Demo-WebApp/python-demo-feed'
   displayName: "Authenticate"
 - script: |
     twine upload -r python-demo-feed --config-file $(PYPIRC_PATH) dist/*
